@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>The Weather Here</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    </head>
+    <body>
+        <script>
+        </script>
+        <h1>The Weather Here</h1>
+        <div><a href="/">check in</a> | <a href="/logs/index.html">checkpoint</a></div>
+        <p>
+            latitude : <span id="latitude"></span><br>
+            longitude : <span id="longitude"></span><br>
+        </p>
+
+        <p>
+            The Weather here is <span id="summary"></span> with a temperature of
+            <span id="temperature"></span>°C.
+        </p>
+        <script src="app.js"></script>
+    </body>
+</html>

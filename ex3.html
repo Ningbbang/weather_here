@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
+    <body>
+        <canvas id="myChart" width="400" height="400"></canvas>
+
+        <script>
+          const xlabels = [];
+          const ytemps = [];
+
+          chartIt();
+
+          async function chartIt(){
+            const data = await getData();
+            const ctx = document.getElementById('myChart');
+            new Chart(ctx, {
+              type: 'line',
+              data: {
+                labels: data.xs,
+                datasets: [{
+                  label: 'Global Average Temperature',
+                  data: data.ys,
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    min: 13.4,
+                    max: 15.2
+                  }
+                }
+              }
+            });
+          };
+          
+          async function getData(){
+            const xs = [];
+            const ys = [];
+
+            const response = await fetch('ZonAnn.csv');
+            const data = await response.text();
+            const table = data.split('\n').slice(1);
+
+            table.forEach(row=> {
+              const columns = row.split(',');
+              const year = columns[0];
+              const temp = columns[1];
+              xs.push(year);
+              ys.push(parseFloat(temp)+14);
+            })
+            return {xs, ys};
+          };
+
+        </script>
+    </body>
+    
+</html>

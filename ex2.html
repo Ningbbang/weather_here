@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Example 2</title>
+    </head>
+    <body>
+        <div id="plot"></div>
+        <script>
+            getData();
+            async function getData() {
+                const response = await fetch('ZonAnn.csv');
+                const data = await response.text();
+                console.log('data fetched');
+
+                const table = data.split('\n').slice(1);
+                table.forEach(row => {
+                    const columns = row.split(',');
+                    const year = columns[0];
+                    const temp = columns[1];
+                    console.log(year, temp);
+                })
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+    </head>
+    <body>
+        <img src="" id="rainbow" width="400px" height="300px">
+        <script>
+            console.log('about to fetch a rainbow');
+
+            catchRainbow()
+                .then(response => {
+                    console.log('yeah');
+                })
+                .catch(error => {
+                    console.log('error');
+                    console.error(error);
+                });
+
+            async function catchRainbow() {
+                const response = await fetch('rainbow.jpg');
+                const blob = await response.blob();
+                document.getElementById('rainbow').src = URL.createObjectURL(blob);
+            }
+
+            // fetch('rainbow.jpg')
+            //     .then(response => {
+            //         console.log(response);
+            //         return response.blob();
+            //     })
+            //     .then(blob => {
+            //         console.log(blob);
+            //         document.getElementById('rainbow').src = URL.createObjectURL(blob);
+            //     })
+            //     .catch(error => {
+            //         console.log('error!');
+            //         console.error(error);
+            //     });
+        </script>
+    </body>
+</html>

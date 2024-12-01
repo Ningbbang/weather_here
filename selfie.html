@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head></head>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <body>
+        <script>
+            function setup() {
+
+                
+        
+                // noCanvas();
+                const video = createCapture(VIDEO);
+                video.size(320, 240)
+
+                if ('geolocation' in navigator){
+                    console.log('geolocation available');
+                    navigator.geolocation.getCurrentPosition(async position => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        const mood = document.getElementById('mood').value;
+                        video.loadPixels();
+                        const image64 = video.canvas.toDataURL();
+
+                        document.getElementById('lat').textContent = lat;
+                        document.getElementById('lon').textContent = lon;
+                        document.getElementById('mood').value = "";
+
+                        const data = {lat, lon, mood, image64};
+                        const options = {
+                            method: 'POST',
+                            headers : {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(data)
+                        };
+                        const response = await fetch('/api', options);
+                        const json = await response.json();
+                        console.log(json);
+                    });
+                } else {
+                    console.log('geolocation unavailable');
+                };
+            };
+        </script>
+        <h1>Data Selfie App</h1>
+        <div><a href="/">enter</a> | <a href="/logs/index.html">list</a></div>
+        <p>
+            latitude : <span id="lat"></span><br>
+            longitude : <span id="lon"></span><br>
+        </p>
+        <input type="text" name="mood" id="mood">
+        <input type="button" name="submit" value="submit" onclick=setup()>
+    </body>
+</html>

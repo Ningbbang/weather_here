@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+        <style>
+            #issMap {height:300px;}
+        </style>
+    </head>
+    <body>
+        <h1>Where is the ISS?</h1>
+        Latitude : <span id="lat"></span>°
+        Longitude : <span id="lon"></span>°
+
+        <div id="issMap"></div>
+
+        <script>
+            let firstTime = true;    
+            const myMap = L.map("issMap").setView([50, 50], 2);
+            var satelite = L.icon({
+                iconUrl: 'satellite.png',
+                iconSize:     [40, 40], // size of the icon
+                iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+                popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+            });
+            const marker = L.marker([50, 50], {icon:satelite}).addTo(myMap).openPopup();
+
+            getCoord();
+            setInterval(getCoord, 1000);
+
+            async function getCoord(){
+                const response = await fetch('https://api.wheretheiss.at/v1/satellites/25544');
+                const data = await response.json();
+                const {latitude, longitude} = data;
+
+                const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                const tileUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+                const tiles = L.tileLayer(tileUrl, { attribution });
+                tiles.addTo(myMap);
+
+                marker.setLatLng([latitude, longitude]);
+                if(firstTime){
+                    myMap.setView([latitude, longitude], 2);
+                    firstTime = false;
+                };
+                document.getElementById('lat').textContent = latitude.toFixed(2);
+                document.getElementById('lon').textContent = longitude.toFixed(2);                
+            };
+        </script>
+    </body>
+</html>
